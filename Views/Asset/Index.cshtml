@@ -1,0 +1,155 @@
+@model List<AssetManager.Models.Asset>
+
+@{
+    ViewData["Title"] = "Danh sách tài sản";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center text-primary">Danh sách tài sản</h2>
+    @if (User.IsInRole("admin"))
+    {
+        <a href="@Url.Action("Create")" class="btn btn-primary mb-3">Thêm mới</a>
+    }
+
+        <form method="get" class="d-flex flex-wrap gap-2 align-items-end mb-4">
+            <div>
+                <input type="text" name="search" class="form-control form-control-sm" placeholder="Tìm theo tên hoặc mã"
+                    value="@ViewBag.CurrentSearch" style="min-width: 180px;" />
+            </div>
+
+            <div>
+                <select name="category" class="form-select form-select-sm" style="min-width: 150px;">
+                    <option value="">-- Tất cả loại --</option>
+                    @foreach (var cat in ViewBag.Categories as List<string>)
+                    {
+                        <option value="@cat" selected="@(cat == ViewBag.CurrentCategory ? "selected" : null)">@cat</option>
+                    }
+                </select>
+            </div>
+
+            <div>
+                <select name="status" class="form-select form-select-sm" style="min-width: 140px;">
+                    <option value="">-- Tất cả trạng thái --</option>
+                    @foreach (var stt in ViewBag.Statuss as List<string>)
+                    {
+                        <option value="@stt" selected="@(stt == ViewBag.CurrentStatus ? "selected" : null)">@stt</option>
+                    }
+                </select>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-sm btn-primary">Lọc</button>
+                <a href="@Url.Action("Index")" class="btn btn-sm btn-secondary ms-2">Reset</a>
+            </div>
+        </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle shadow-sm">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>#</th>
+                    <th>Mã tài sản</th>
+                    <th>Tên tài sản</th>
+                    <th>Loại</th>
+                    <th>Vị trí</th>
+                    <th>Ngày mua</th>
+                    <th>Trạng thái</th>
+                    <th>Hình ảnh</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">Không có tài sản nào.</td>
+                    </tr>
+                }
+                else
+                {
+                    int stt = 1;
+                    foreach (var asset in Model)
+                    {
+                        <tr>
+                            <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'" class="text-center">@stt</td>
+                            <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'">@asset.Code</td>
+                            <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'">@asset.Name</td>
+                            <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'">@asset.Category</td>
+                            <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'">@asset.Location</td>
+                            <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'">@(asset.PurchaseDate.HasValue ? asset.PurchaseDate.Value.ToString("dd/MM/yyyy") : "Chưa xác định")</td>
+                            <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'"><span class="badge bg-success">@asset.Status</span></td>
+                            <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'" class="text-center">
+                                @if (!string.IsNullOrEmpty(asset.ImageUrl))
+                                {
+                                    <img src="@asset.ImageUrl" alt="Ảnh" width="80" class="rounded" />
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Không có ảnh</span>
+                                }
+                            </td>
+                            <td  class="text-center">
+                                @if (User.IsInRole("admin") || User.IsInRole("ql"))
+                                {
+                                    <a class="btn btn-sm btn-primary" href="@Url.Action("Edit", new { id = asset.Id })">Sửa</a>
+
+                                }
+                                @if (User.IsInRole("admin"))
+                                {
+                                    <button class="btn btn-sm btn-danger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#confirmDeleteModal"
+                                            data-id="@asset.Id"
+                                            data-name="@asset.Name">
+                                        Xoá
+                                    </button>
+                                }
+                               
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmDeleteLabel">Xác nhận xoá</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xoá tài sản <strong id="assetNameToDelete"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="post">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                    <button type="submit" class="btn btn-danger">Xoá</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('confirmDeleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var assetId = button.getAttribute('data-id');
+            var assetName = button.getAttribute('data-name');
+
+            // Cập nhật tên tài sản trong modal
+            document.getElementById('assetNameToDelete').textContent = assetName;
+
+            // Cập nhật action form
+            var deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = '/Asset/DeleteConfirmed/' + assetId;
+        });
+    </script>
+}

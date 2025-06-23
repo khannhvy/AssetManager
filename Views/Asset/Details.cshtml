@@ -1,0 +1,64 @@
+@model AssetManager.Models.Asset
+
+@{
+    ViewData["Title"] = "Thông tin tài sản";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center text-info mb-4">Thông tin chi tiết tài sản</h2>
+
+    <div class="row">
+        <div class="col-md-4 text-center">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="Ảnh tài sản" class="img-fluid rounded border shadow-sm mb-3" style="max-height: 250px;" />
+            }
+            else
+            {
+                <div class="text-muted">Không có ảnh</div>
+            }
+        </div>
+
+        <div class="col-md-8">
+            <table class="table table-bordered table-striped shadow-sm">
+                <tbody>
+                    <tr>
+                        <th scope="row" style="width: 200px;">Mã tài sản</th>
+                        <td>@Model.Code</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Tên tài sản</th>
+                        <td>@Model.Name</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Loại</th>
+                        <td>@Model.Category</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Vị trí</th>
+                        <td>@Model.Location</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Giá gốc</th>
+                        <td>@String.Format("{0:N0} VNĐ", Model.OriginalValue)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Ngày mua</th>
+                        <td>@(Model.PurchaseDate.HasValue ? Model.PurchaseDate.Value.ToString("dd/MM/yyyy") : "Chưa xác định")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Trạng thái</th>
+                        <td>
+                            <span class="badge bg-success">@Model.Status</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="mt-4 text-end">
+                <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-warning">Sửa</a>
+                <a href="@Url.Action("Index")" class="btn btn-secondary ms-2">Quay lại danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>

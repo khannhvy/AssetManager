@@ -1,0 +1,10 @@
+@model AssetManager.Models.Asset
+
+<h2>Xoá tài sản</h2>
+<p>Bạn có chắc chắn muốn xoá tài sản: <strong>@Model.Name</strong>?</p>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit">Xoá</button> |
+    <a href="@Url.Action("Index")">Huỷ</a>
+</form>

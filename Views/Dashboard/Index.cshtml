@@ -1,0 +1,100 @@
+@model AssetManager.Models.Dashboard
+
+@{
+    ViewData["Title"] = "Trang chính";
+    var warningAssets = Model.WarningAssets;
+    var assetsByCategory = Model.AssetsByCategory;
+    var assetsByStatus = Model.AssetsByStatus;
+}
+
+<div class="container mt-4">
+    <h2 class="text-center text-primary mb-4">Tổng quan tài sản</h2>
+
+    <div class="row text-center mb-4">
+        @foreach (var cat in assetsByCategory)
+        {
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5>@cat.Category</h5>
+                        <p class="display-6">@cat.Count</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <canvas id="categoryChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+
+    <h4 class="text-danger mb-3"> Tài sản cần chú ý</h4>
+    <table class="table table-bordered table-hover shadow-sm">
+        <thead class="table-warning text-center">
+            <tr>
+                <th>Mã</th>
+                <th>Tên</th>
+                <th>Loại</th>
+                <th>Ngày mua</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (warningAssets.Count == 0)
+            {
+                <tr><td colspan="5" class="text-center text-muted">Không có tài sản cần chú ý</td></tr>
+            }
+            else
+            {
+                foreach (var item in warningAssets)
+                {
+                    <tr>
+                        <td>@item.Code</td>
+                        <td>@item.Name</td>
+                        <td>@item.Category</td>
+                        <td>@(item.PurchaseDate?.ToString("dd/MM/yyyy") ?? "-")</td>
+                        <td><span class="badge bg-danger">@item.Status</span></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const categoryChart = new Chart(document.getElementById("categoryChart"), {
+            type: 'bar',
+            data: {
+                labels: [@string.Join(",", Model.AssetsByCategory.Select(c => $"'{c.Category}'"))],
+                datasets: [{
+                    label: 'Số lượng',
+                    data: [@string.Join(",", Model.AssetsByCategory.Select(c => c.Count))],
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                }]
+            }
+        });
+
+        const statusChart = new Chart(document.getElementById("statusChart"), {
+            type: 'doughnut',
+            data: {
+                labels: [@string.Join(",", Model.AssetsByStatus.Select(s => $"'{s.Status}'"))],
+                datasets: [{
+                    data: [@string.Join(",", Model.AssetsByStatus.Select(s => s.Count))],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)'
+                    ]
+                }]
+            }
+        });
+    </script>
+}

@@ -1,0 +1,71 @@
+@model AssetManager.Models.Asset
+
+@{
+    ViewData["Title"] = "Sửa tài sản";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center text-warning mb-4">Sửa tài sản</h2>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="Code" class="form-label">Mã tài sản:</label>
+            <input asp-for="Code" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Tên tài sản:</label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Category" class="form-label">Loại:</label>
+            <select asp-for="Category" asp-items="ViewBag.CategoryList" class="form-select"></select>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Location" class="form-label">Vị trí:</label>
+            <input asp-for="Location" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="OriginalValue" class="form-label">Giá gốc:</label>
+            <input asp-for="OriginalValue" type="number" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PurchaseDate" class="form-label">Ngày mua:</label>
+            <input asp-for="PurchaseDate" type="date" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Status" class="form-label">Trạng thái:</label>
+            <select asp-for="Status" asp-items="ViewBag.StatusList" class="form-select"></select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ảnh hiện tại:</label><br />
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="Ảnh hiện tại" width="100" class="rounded mb-2" />
+            }
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Chọn ảnh mới (tuỳ chọn):</label>
+            <input type="file" name="ImageFile" class="form-control" />
+        </div>
+        <input type="hidden" asp-for="ImageUrl" />
+
+
+       @* <input type="hidden" asp-for="ImageUrl" name="ImageUrl" /> *@
+
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-success">Cập nhật</button>
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </form>
+</div>
