@@ -1,0 +1,36 @@
+@model Dictionary<string, List<AssetManager.Models.Asset>>
+
+@{
+    ViewData["Title"] = "Chọn tài sản để giao";
+}
+
+<h2 class="mb-4">Chọn tài sản để giao</h2>
+
+@foreach (var category in Model)
+{
+    <h4 class="text-primary mt-4">@category.Key</h4>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Mã</th>
+                <th>Tên</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var asset in category.Value)
+            {
+                <tr>
+                    <td>@asset.Code</td>
+                    <td>@asset.Name</td>
+                    <td>
+                        <a asp-controller="Assignment" asp-action="Assign" asp-route-assetId="@asset.Id" class="btn btn-sm btn-success">
+                            Giao
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

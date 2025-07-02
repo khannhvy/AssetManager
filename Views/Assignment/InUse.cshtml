@@ -1,0 +1,28 @@
+@model List<AssetManager.Models.AssetAssignmentViewModel>
+@{
+    ViewData["Title"] = "Tài sản đang được sử dụng";
+}
+
+<h2 class="mb-4 text-info">Tài sản đang được sử dụng</h2>
+
+<table class="table table-hover table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>Mã tài sản</th>
+            <th>Tên tài sản</th>
+            <th>Người nhận</th>
+            <th>Ngày giao</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var asset in Model)
+        {
+            <tr>
+                <td>@asset.AssetCode</td>
+                <td>@asset.AssetName</td>
+                <td>@asset.AssigneeName</td>
+                <td>@asset.AssignedDate.ToString("dd/MM/yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>

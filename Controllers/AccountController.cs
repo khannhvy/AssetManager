@@ -4,9 +4,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Google.Cloud.Firestore;
+using AssetManager.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AssetManager.Controllers
 {
+    // [Authorize]
     public class AccountController : Controller
     {
         private readonly FirebaseService _firebaseService;
@@ -38,8 +42,8 @@ namespace AssetManager.Controllers
 
             //  Lấy vai trò từ Firestore
             var role = await _firebaseService.GetUserRoleAsync(user.Email) ?? "user";
-           // var role = await _firebaseService.GetUserRoleAsync(user.Uid) ?? "user";
-             Console.WriteLine($" TK {user.Email} - Role: {role}");
+            // var role = await _firebaseService.GetUserRoleAsync(user.Uid) ?? "user";
+            Console.WriteLine($" TK {user.Email} - Role: {role}");
 
             //  Claims
             var claims = new List<Claim>
@@ -74,7 +78,7 @@ namespace AssetManager.Controllers
         {
             return View();
         }
-        
+
         public IActionResult DebugUser()
         {
             if (!User.Identity.IsAuthenticated)
@@ -87,6 +91,91 @@ namespace AssetManager.Controllers
             }
 
             return Content(result);
+        }
+
+        [HttpGet("/api/users/{id}")]
+        public async Task<IActionResult> GetUserName(string id)
+        {
+            var user = await _firebaseService.GetUserByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            return Json(new { fullName = user.Name });
+        }
+
+        // [HttpGet("/api/users/search")]
+        [HttpGet("/api/users/findbyiduser")]
+        public async Task<IActionResult> GetUserByIdUserField(string q)
+        {
+            // Console.WriteLine($" [API] Bắt đầu tìm kiếm người dùng theo IdUser = {idUser}");
+            var query = _firebaseService.GetFirestoreDb().Collection("users")
+                .WhereEqualTo("IdUser", q)
+                .Limit(1);
+
+            var snapshot = await query.GetSnapshotAsync();
+
+            // Console.WriteLine($" Kết quả trả về: {snapshot.Count} bản ghi");
+
+            if (snapshot.Count == 0)
+                return NotFound();
+
+            var doc = snapshot.Documents.First();
+            var user = doc.ConvertTo<User>();
+
+            //user.Id = doc.Id;
+
+            return Json(new
+            {
+                id = user.Id,
+                name = user.Name,
+                email = user.Email
+            });
+
+        }
+
+        [HttpGet("/api/users/search")]
+        public async Task<IActionResult> SearchUsers(string q)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+                return BadRequest("Thiếu từ khóa tìm kiếm");
+
+            //Console.WriteLine($" Đang tìm với từ khóa: {q}");
+
+            var users = await _firebaseService.SearchUsersAsync(q);
+
+            var results = users.Select(user => new
+            {
+                id = user.Id,
+                name = user.Name,
+                email = user.Email
+            });
+
+            return Ok(results);
+        }
+
+        [HttpGet("/api/users/findbyiduser")]
+        public async Task<IActionResult> FindByIdUser(string q)
+        {
+            Console.WriteLine($"🔍 Đang tìm người dùng theo IdUser: {q}");
+
+            var query = _firebaseService.GetFirestoreDb().Collection("users")
+                .WhereEqualTo("IdUser", q)
+                .Limit(1);
+
+            var snapshot = await query.GetSnapshotAsync();
+
+            if (snapshot.Count == 0)
+                return NotFound();
+
+            var doc = snapshot.Documents.First();
+            var user = doc.ConvertTo<User>();
+            user.Id = doc.Id; 
+            return Json(new
+            {
+                id = user.Id,
+                name = user.Name,
+                email = user.Email
+            });
         }
 
     }

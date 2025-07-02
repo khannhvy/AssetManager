@@ -1,0 +1,9 @@
+D:\Mon\TTDN\AssetManager\obj\Debug\net8.0\AssetManager.csproj.AssemblyReference.cache
+D:\Mon\TTDN\AssetManager\obj\Debug\net8.0\AssetManager.GeneratedMSBuildEditorConfig.editorconfig
+D:\Mon\TTDN\AssetManager\obj\Debug\net8.0\AssetManager.AssemblyInfoInputs.cache
+D:\Mon\TTDN\AssetManager\obj\Debug\net8.0\AssetManager.AssemblyInfo.cs
+D:\Mon\TTDN\AssetManager\obj\Debug\net8.0\AssetManager.csproj.CoreCompileInputs.cache
+D:\Mon\TTDN\AssetManager\obj\Debug\net8.0\AssetManager.MvcApplicationPartsAssemblyInfo.cache
+D:\Mon\TTDN\AssetManager\obj\Debug\net8.0\AssetManager.RazorAssemblyInfo.cache
+D:\Mon\TTDN\AssetManager\obj\Debug\net8.0\AssetManager.RazorAssemblyInfo.cs
+D:\Mon\TTDN\AssetManager\obj\Debug\net8.0\AssetManager.sourcelink.json

@@ -27,10 +27,10 @@ namespace AssetManager.Models
 
         [Required(ErrorMessage = "Không được bỏ trống")]
         [FirestoreProperty]
-        public string? Location { get; set; }
+        // public string? Location { get; set; }
 
-        [Required(ErrorMessage = "Không được bỏ trống")]
-        [FirestoreProperty]
+        // [Required(ErrorMessage = "Không được bỏ trống")]
+        // [FirestoreProperty]
         public long OriginalValue { get; set; }
 
         [Required(ErrorMessage = "Không được bỏ trống")]
@@ -41,6 +41,14 @@ namespace AssetManager.Models
         [Required(ErrorMessage = "Không được bỏ trống")]
         [FirestoreProperty]
         public string? Status { get; set; }
+
+        // Liên kết đến phòng ban trong Firestore
+        [FirestoreProperty]
+        public DocumentReference? Department { get; set; }
+
+        // Dùng để binding từ form
+        [Required(ErrorMessage = "Không được bỏ trống")]
+        public string? DepartmentId { get; set; }
 
         [FirestoreProperty]
         public Timestamp CreatedAt { get; set; } = Timestamp.FromDateTime(DateTime.UtcNow);

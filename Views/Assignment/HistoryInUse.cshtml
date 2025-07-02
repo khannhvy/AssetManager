@@ -1,0 +1,65 @@
+@model List<AssetManager.Models.AssetHistoryViewModel>
+
+@{
+    ViewData["Title"] = "Lịch sử sử dụng tài sản";
+    var categories = ViewBag.Categories as List<string>;
+    var selectedCategory = ViewBag.CurrentCategory as string;
+    var assignee = ViewBag.CurrentAssignee as string;
+}
+
+<h2 class="mb-4 text-primary">Lịch sử sử dụng tài sản</h2>
+
+<form method="get" asp-action="HistoryInUse" class="mb-3 row g-2 align-items-center">
+    <div class="col-auto">
+        <select name="category" class="form-select" onchange="this.form.submit()">
+            @foreach (var cat in categories)
+            {
+                <option value="@cat" selected="@(cat == selectedCategory)">@cat</option>
+            }
+        </select>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Chưa có lịch sử sử dụng nào.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Mã tài sản</th>
+                <th>Tên tài sản</th>
+                <th>Loại tài sản</th>
+                <th>Người nhận</th>
+                <th>Người giao</th>
+                <th>Ngày giao</th>
+                <th>Ngày trả</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var h in Model)
+            {
+                <tr>
+                    <td>@h.AssetCode</td>
+                    <td>@h.AssetName</td>
+                    <td>@h.AssetCategory</td>
+                    <td>@h.AssigneeName</td>
+                    <td>@h.AssignedBy</td>
+                    <td>@(h.AssignedDate?.ToString("dd/MM/yyyy") ?? "—")</td>
+                    <td>
+                        @if (h.ReturnedDate.HasValue)
+                        {
+                            @h.ReturnedDate?.ToString("dd/MM/yyyy")
+                        }
+                        else
+                        {
+                            <span class="text-danger">Chưa trả</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

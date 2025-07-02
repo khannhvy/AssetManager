@@ -1,0 +1,38 @@
+@model List<AssetManager.Models.AssetAssignmentViewModel>
+
+<h2 class="mb-4 text-danger">Danh sách tài sản đang được sử dụng</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Không có tài sản nào đang được sử dụng.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Mã thiết bị</th>
+                <th>Tên thiết bị</th>
+                <th>Người nhận</th>
+                <th>Ngày giao</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td>@a.AssetCode</td>
+                    <td>@a.AssetName</td>
+                    <td>@a.AssigneeName</td>
+                    <td>@a.AssignedDate.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <form asp-action="Return" method="post" asp-route-assignmentId="@a.Id" onsubmit="return confirm('Xác nhận trả thiết bị?');">
+                            <button type="submit" class="btn btn-sm btn-success">Trả</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

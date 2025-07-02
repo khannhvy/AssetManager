@@ -52,8 +52,36 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXRcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Mon/TTDN/AssetManager/Views/Asset/History.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXRcSGlzdG9yeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Mon/TTDN/AssetManager/Views/Asset/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzZXRcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Mon/TTDN/AssetManager/Views/Assignment/Assign.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzaWdubWVudFxBc3NpZ24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Mon/TTDN/AssetManager/Views/Assignment/HistoryInUse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzaWdubWVudFxIaXN0b3J5SW5Vc2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Mon/TTDN/AssetManager/Views/Assignment/InUse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzaWdubWVudFxJblVzZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Mon/TTDN/AssetManager/Views/Assignment/Return.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzaWdubWVudFxSZXR1cm4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Mon/TTDN/AssetManager/Views/Assignment/ReturnList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzaWdubWVudFxSZXR1cm5MaXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Mon/TTDN/AssetManager/Views/Assignment/SelectAsset.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXNzaWdubWVudFxTZWxlY3RBc3NldC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Mon/TTDN/AssetManager/Views/Dashboard/Index.cshtml]

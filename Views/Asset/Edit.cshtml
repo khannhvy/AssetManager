@@ -1,4 +1,5 @@
 @model AssetManager.Models.Asset
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewData["Title"] = "Sửa tài sản";
@@ -9,63 +10,86 @@
 
     <form asp-action="Edit" method="post" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
         <input type="hidden" asp-for="Id" />
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
         <div class="mb-3">
-            <label asp-for="Code" class="form-label">Mã tài sản:</label>
-            <input asp-for="Code" class="form-control" />
+            <label asp-for="Code" class="form-label"></label>
+            <input type="hidden" asp-for="Code" />
+            <input asp-for="Code" class="form-control" disabled />
+            <span asp-validation-for="Code" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Name" class="form-label">Tên tài sản:</label>
+            <label asp-for="Name" class="form-label"></label>
             <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Category" class="form-label">Loại:</label>
-            <select asp-for="Category" asp-items="ViewBag.CategoryList" class="form-select"></select>
+            <label asp-for="Category" class="form-label"></label>
+            <select asp-for="Category" class="form-select" asp-items="ViewBag.CategoryList">
+                <option value="">-- Chọn loại --</option>
+            </select>
+            <span asp-validation-for="Category" class="text-danger"></span>
         </div>
 
-        <div class="mb-3">
-            <label asp-for="Location" class="form-label">Vị trí:</label>
+        @* <div class="mb-3">
+            <label asp-for="Location" class="form-label"></label>
             <input asp-for="Location" class="form-control" />
-        </div>
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div> *@
 
         <div class="mb-3">
-            <label asp-for="OriginalValue" class="form-label">Giá gốc:</label>
+            <label asp-for="OriginalValue" class="form-label"></label>
             <input asp-for="OriginalValue" type="number" class="form-control" />
+            <span asp-validation-for="OriginalValue" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="PurchaseDate" class="form-label">Ngày mua:</label>
+            <label asp-for="PurchaseDate" class="form-label"></label>
             <input asp-for="PurchaseDate" type="date" class="form-control" />
+            <span asp-validation-for="PurchaseDate" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Status" class="form-label">Trạng thái:</label>
-            <select asp-for="Status" asp-items="ViewBag.StatusList" class="form-select"></select>
+            <label asp-for="Status" class="form-label"></label>
+            <select asp-for="Status" class="form-select" asp-items="ViewBag.StatusList">
+                <option value="">-- Chọn trạng thái --</option>
+            </select>
+            <span asp-validation-for="Status" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Ảnh hiện tại:</label><br />
+            <label asp-for="DepartmentId" class="form-label">Phòng ban</label>
+            <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentList">
+                <option value="">-- Chọn phòng ban --</option>
+            </select>
+            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label for="ImageFile" class="form-label">Ảnh mới (nếu muốn đổi):</label>
+            <input type="file" name="ImageFile" class="form-control" />
+            <input type="hidden" asp-for="ImageUrl" />
+
             @if (!string.IsNullOrEmpty(Model.ImageUrl))
             {
-                <img src="@Model.ImageUrl" alt="Ảnh hiện tại" width="100" class="rounded mb-2" />
+                <p class="mt-2">Ảnh hiện tại:</p>
+                <img src="@Model.ImageUrl" style="max-width: 200px;" />
             }
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Chọn ảnh mới (tuỳ chọn):</label>
-            <input type="file" name="ImageFile" class="form-control" />
-        </div>
-        <input type="hidden" asp-for="ImageUrl" />
-
-
-       @* <input type="hidden" asp-for="ImageUrl" name="ImageUrl" /> *@
-
-
         <div class="text-end">
-            <button type="submit" class="btn btn-success">Cập nhật</button>
+            <button type="submit" class="btn btn-primary">Lưu</button>
             <a href="@Url.Action("Index")" class="btn btn-secondary">Quay lại</a>
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+}

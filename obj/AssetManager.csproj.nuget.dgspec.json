@@ -56,7 +56,7 @@
             },
             "Google.Cloud.Firestore": {
               "target": "Package",
-              "version": "[3.3.0, )"
+              "version": "[3.10.0, )"
             },
             "Google.Cloud.Storage.V1": {
               "target": "Package",

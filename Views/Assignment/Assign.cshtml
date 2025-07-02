@@ -1,0 +1,134 @@
+@model AssetManager.Models.AssetAssignmentViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Giao tài sản";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center text-primary mb-4">Giao tài sản</h2>
+
+    <form asp-action="Assign" method="post" class="shadow p-4 rounded bg-light">
+        <input type="hidden" asp-for="AssetId" />
+
+        <div class="mb-3">
+            <label>Mã tài sản</label>
+            <input asp-for="AssetCode" class="form-control" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label>Tên tài sản</label>
+            <input asp-for="AssetName" class="form-control" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label for="userSearchInput" class="form-label">Tìm người nhận (theo tên/email)</label>
+            <input type="text" class="form-control" id="userSearchInput" placeholder="Nhập tên hoặc email..." autocomplete="off" />
+            <div id="userDropdown" class="list-group position-absolute" style="z-index: 1000;"></div>
+
+            <input type="hidden" asp-for="AssigneeId" id="AssigneeId" />
+            <div class="mt-2 text-success" id="selectedUserInfo" style="display: none;"></div>
+        </div>
+
+        @* <div class="mb-3">
+            <label asp-for="AssigneeId" class="form-label">ID người nhận</label>
+            <input asp-for="AssigneeId" class="form-control" id="assigneeIdInput" />
+            <span asp-validation-for="AssigneeId" class="text-danger"></span>
+        </div> *@
+
+        <div class="mb-3" id="assigneeInfo" style="display: none;">
+            👤 <strong id="assigneeName"></strong>
+        </div>
+
+        <input type="hidden" asp-for="AssigneeName" id="AssigneeName" />
+        <input type="hidden" asp-for="AssignedById" id="AssignedById" value="@User.Identity?.Name" />
+
+
+        <button type="submit" class="btn btn-success">Giao</button>
+        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Tìm người dùng theo AssigneeId -->
+    <script>
+        $(document).ready(function () {
+            $('#assigneeIdInput').on('input', function () {
+                const id = $(this).val().trim();
+
+                if (id.length < 3) {
+                    $('#assigneeInfo').hide();
+                    return;
+                }
+
+                $.get(`/api/users/${id}`)
+                    .done(function (data) {
+                        $('#assigneeName').text("Tên người nhận: " + data.fullName);
+                        $('#assigneeInfo').show().removeClass("text-danger").addClass("text-success");
+                    })
+                    .fail(function () {
+                        $('#assigneeName').text("Không tìm thấy người dùng này.");
+                        $('#assigneeInfo').show().removeClass("text-success").addClass("text-danger");
+                    });
+            });
+        });
+    </script>
+
+     <!-- tìm email,ten,iduer -->
+    <script>
+        $(document).ready(function () {
+            const $input = $('#userSearchInput');
+            const $dropdown = $('#userDropdown');
+            const $assigneeId = $('#AssigneeId');
+            const $info = $('#selectedUserInfo');
+
+            $input.on('input', function () {
+                const keyword = $(this).val().trim();
+                $dropdown.empty().hide();
+                $assigneeId.val('');
+                $info.hide();
+
+                if (keyword.length < 2) return;
+
+                // Gọi API tìm theo tất cả: name, email, IdUser
+                $.get(`/api/users/search?q=${keyword}`)
+                    .done(function (users) {
+                        $dropdown.empty();  
+
+                        if (!users || users.length === 0) {
+                            $dropdown.append(`<div class="list-group-item disabled">Không tìm thấy</div>`).show();
+                            return;
+                        }
+
+                        users.forEach(user => {
+                            const item = $(`<button type="button" class="list-group-item list-group-item-action">${user.name} (${user.email})</button>`);
+                            item.on('click', function () {
+                                $input.val(`${user.name} (${user.email})`);
+                                $assigneeId.val(user.id);
+                                 $('#AssigneeName').val(user.name); 
+                                 $('#AssignedById').val('@User.Identity?.Name');
+                                $dropdown.empty().hide();
+                                @* $info.text(` Đã chọn: ${user.name} (${user.email})`).show(); *@
+                            });
+                            $dropdown.append(item);
+                        });
+
+                        $dropdown.show();
+                    })
+                    .fail(function () {
+                        $dropdown.empty();
+                        $dropdown.append(`<div class="list-group-item disabled">Không tìm thấy</div>`).show();
+                    });
+            });
+
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('#userSearchInput, #userDropdown').length) {
+                    $dropdown.hide();
+                }
+            });
+        });
+    </script>
+}
+

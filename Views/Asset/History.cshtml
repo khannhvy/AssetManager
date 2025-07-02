@@ -1,0 +1,29 @@
+@model List<AssetManager.Models.History>
+
+@{
+    ViewData["Title"] = ViewBag.Title;
+}
+
+<h3>@ViewBag.Title</h3>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Thời gian</th>
+            <th>Hành động</th>
+            <th>Người thực hiện</th>
+            <th>Ghi chú</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Timestamp.ToDateTime().ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.Action</td>
+                <td>@item.PerformedBy</td>
+                <td>@item.Note</td>
+            </tr>
+        }
+    </tbody>
+</table>
