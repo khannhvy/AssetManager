@@ -1,0 +1,40 @@
+@model AssetManager.Models.User
+
+@{
+    ViewData["Title"] = "Thêm User mới";
+}
+
+<h2 class="text-success mb-3">Thêm User mới</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="IdUser" class="form-label"></label>
+        <input asp-for="IdUser" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Role" class="form-label"></label>
+        <select asp-for="Role" class="form-select">
+            <option value="">-- Chọn vai trò --</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+            @* <option value="ql">Manager</option> *@
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

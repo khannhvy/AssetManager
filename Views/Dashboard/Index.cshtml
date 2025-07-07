@@ -10,10 +10,11 @@
 <div class="container mt-4">
     <h2 class="text-center text-primary mb-4">Tổng quan tài sản</h2>
 
-    <div class="row text-center mb-4">
+ <h4 class="text-danger mb-3"> Tổng tài sản</h4>
+    <div class="row text-center mb-2"> 
         @foreach (var cat in assetsByCategory)
         {
-            <div class="col-md-3 mb-3">
+            <div class="col-md-3 mb-2">
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h5>@cat.Category</h5>
@@ -24,14 +25,35 @@
         }
     </div>
 
-    <div class="row mb-5">
-        <div class="col-md-6">
-            <canvas id="categoryChart"></canvas>
+    @* <div class="row">
+        <div class="col-md-2">
+            <canvas id="categoryChart"></canvas>    
         </div>
-        <div class="col-md-6">
+        <div class="col-md-2">
             <canvas id="statusChart"></canvas>
         </div>
+    </div> *@
+ <h4 class="text-danger mt-2 mb-2"> Trạng thái tài sản</h4>
+   <div class="row text-center mb-2">
+    <div class="col-md-3 mb-2">
+        <div class="card shadow-sm status-card status-used">
+            <div class="card-body">
+                <h5>Đang sử dụng</h5>
+                <p class="display-6 text-primary">@Model.UsedAssetsCount</p>
+            </div>
+        </div>
     </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm status-card">
+            <div class="card-body">
+                <h5>Còn trống</h5>
+                <p class="display-6 text-primary">@Model.FreeAssetsCount</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <h4 class="text-danger mb-3"> Tài sản cần chú ý</h4>
     <table class="table table-bordered table-hover shadow-sm">
@@ -65,6 +87,70 @@
         </tbody>
     </table>
 </div>
+
+<style>
+    .card {
+        border-radius: 10px;
+        transition: transform 0.2s;
+        border: 1px solid #dee2e6;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .card-body h5 {
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 10px;
+    }
+
+    .card-body p {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .category-card {
+        border-left: 5px solid #0d6efd;
+    }
+
+    .status-card {
+        border-left: 5px solid #20c997;
+    }
+
+    .status-card.status-used {
+    border-left: 5px solid #dc3545; 
+    }
+
+    .status-card.status-used .card-body h5 {
+        color: #007bff;
+    }
+
+    table.table-warning th {
+        background-color: #ffc107 !important;
+        color: #000;
+    }
+
+    table.table-hover tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    table td, table th {
+        vertical-align: middle !important;
+    }
+
+    .badge.bg-danger {
+        font-size: 0.9rem;
+        padding: 0.5em 0.7em;
+    }
+
+    canvas {
+        max-height: 250px;
+        height: 250px;
+    }
+</style>
+
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

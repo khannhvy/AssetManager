@@ -1,0 +1,38 @@
+@model List<AssetManager.Models.MaintenanceScheduleViewModel>
+
+<h2 class="mb-4">Lịch Bảo Trì Định Kỳ (6 tháng)</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Mã tài sản</th>
+            <th>Tên tài sản</th>
+            <th>Ngày mua</th>
+            <th>Lần bảo trì gần nhất</th>
+            <th>Lịch bảo trì kế tiếp</th>
+            <th>Trạng thái</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.AssetCode</td>
+                <td>@item.AssetName</td>
+                <td>@(item.PurchaseDate?.ToString("dd/MM/yyyy") ?? "-")</td>
+                <td>@(item.LastMaintenanceDate?.ToString("dd/MM/yyyy") ?? "-")</td>
+                <td>@item.NextMaintenanceDate.ToString("dd/MM/yyyy")</td>
+                <td>
+                    @if (item.Status == "Quá hạn bảo trì")
+                    {
+                        <span class="text-danger fw-bold">@item.Status</span>
+                    }
+                    else
+                    {
+                        <span class="text-success">@item.Status</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

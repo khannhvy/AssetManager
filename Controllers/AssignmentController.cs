@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace AssetManager.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class AssignmentController : Controller
     {
         private readonly FirebaseService _firebase;
@@ -78,12 +78,15 @@ namespace AssetManager.Controllers
             }
 
             
-            var assignedById = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            vm.AssignedById = assignedById;
+            //var assignedById = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var assignedByEmail = User.FindFirst(ClaimTypes.Name)?.Value;
+
+           // vm.AssignedById = assignedById;
+            //vm.AssignedByEmail = assignedByEmail;
 
             // Lấy thông tin người giao (đang đăng nhập)
-            var assigner = await _firebase.GetUserByIdAsync(assignedById);
-            var assignedByName = assigner?.Name ?? "(Không rõ)";
+            //var assigner = await _firebase.GetUserByIdAsync(assignedById);
+            //var assignedByName = assigner?.Name ?? "(Không rõ)";
 
             var user = await _firebase.GetUserByIdAsync(vm.AssigneeId);
             //var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -95,20 +98,20 @@ namespace AssetManager.Controllers
             }
             // Giao tài sản và lưu thông tin người nhận + người giao
             // await _firebase.CreateAssignmentAsync(vm.AssetId, vm.AssigneeId, assignedById, assignedByName);
-            await _firebase.CreateAssignmentAsync(vm.AssetId, vm.AssigneeId, assignedById);
+            await _firebase.CreateAssignmentAsync(vm.AssetId, vm.AssigneeId,  assignedByEmail);
 
             try
             {
                 //Console.WriteLine($" Người dùng hợp lệ: {user.Name} - {user.Email}");
 
                 // await _firebase.CreateAssignmentAsync(vm.AssetId, vm.AssigneeId, assignedById, user.Name);
-                await _firebase.CreateAssignmentAsync(vm.AssetId, vm.AssigneeId, assignedById);
+                await _firebase.CreateAssignmentAsync(vm.AssetId, vm.AssigneeId,  assignedByEmail);
                 // Console.WriteLine($" Đã ghi assignment vào Firestore");
 
                 await _firebase.AddAssetHistoryAsync(new History
                 {
                     AssetId = vm.AssetId,
-                    Action = $"Giao cho {user.Name} bởi {assignedById}",
+                    Action = $"Giao cho {user.Name} bởi {assignedByEmail}",
                     Timestamp = Timestamp.FromDateTime(DateTime.UtcNow)
                 });
                 //Console.WriteLine($" Đã ghi lịch sử giao tài sản");
@@ -120,7 +123,7 @@ namespace AssetManager.Controllers
                 return View(vm);
             }
 
-            return RedirectToAction("InUse");
+            return RedirectToAction("ReturnList");
         }
 
         // Danh sách đang sử dụng
@@ -134,7 +137,7 @@ namespace AssetManager.Controllers
         {
             await _firebase.ReturnAssignmentAsync(assignmentId);
             TempData["Success"] = "Đã thu hồi tài sản thành công!";
-            return RedirectToAction("InUse");
+            return RedirectToAction("ReturnList");
         }
 
         // public async Task<IActionResult> ReturnList()

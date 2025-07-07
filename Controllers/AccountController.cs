@@ -63,7 +63,7 @@ namespace AssetManager.Controllers
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Asset");
         }
 
         [HttpPost]

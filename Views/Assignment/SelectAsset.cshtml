@@ -1,10 +1,10 @@
 @model Dictionary<string, List<AssetManager.Models.Asset>>
 
 @{
-    ViewData["Title"] = "Chọn tài sản để giao";
+    ViewData["Title"] = "Chọn tài sản để gán";
 }
 
-<h2 class="mb-4">Chọn tài sản để giao</h2>
+<h2 class="mb-4">Chọn tài sản để gán</h2>
 
 @foreach (var category in Model)
 {
@@ -26,7 +26,7 @@
                     <td>@asset.Name</td>
                     <td>
                         <a asp-controller="Assignment" asp-action="Assign" asp-route-assetId="@asset.Id" class="btn btn-sm btn-success">
-                            Giao
+                            Gán
                         </a>
                     </td>
                 </tr>

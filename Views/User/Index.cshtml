@@ -1,0 +1,42 @@
+@model List<AssetManager.Models.User>
+
+@{
+    ViewData["Title"] = "Danh sách User";
+}
+
+<h2 class="text-primary mb-3">Danh sách User</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">Thêm User mới</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Id</th>
+            <th>IdUser</th>
+            <th>Tên</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.IdUser</td>
+                <td>@user.Name</td>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-primary btn-sm">Sửa</a>
+
+                    <form asp-action="Delete" asp-route-id="@user.Id" method="post" style="display:inline" 
+                          onsubmit="return confirm('Bạn có chắc chắn muốn xóa user này không?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

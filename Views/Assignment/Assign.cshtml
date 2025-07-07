@@ -2,11 +2,11 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    ViewData["Title"] = "Giao tài sản";
+    ViewData["Title"] = "Gián tài sản";
 }
 
 <div class="container mt-4">
-    <h2 class="text-center text-primary mb-4">Giao tài sản</h2>
+    <h2 class="text-center text-primary mb-4">Gán tài sản</h2>
 
     <form asp-action="Assign" method="post" class="shadow p-4 rounded bg-light">
         <input type="hidden" asp-for="AssetId" />
@@ -44,7 +44,7 @@
         <input type="hidden" asp-for="AssignedById" id="AssignedById" value="@User.Identity?.Name" />
 
 
-        <button type="submit" class="btn btn-success">Giao</button>
+        <button type="submit" class="btn btn-success">Gán</button>
         <a asp-action="Index" class="btn btn-secondary">Hủy</a>
     </form>
 </div>

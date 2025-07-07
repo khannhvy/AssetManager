@@ -91,7 +91,19 @@
                             <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'">@asset.Category</td>
                             @* <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'">@asset.Location</td> *@
                             <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'">@(asset.PurchaseDate.HasValue ? asset.PurchaseDate.Value.ToString("dd/MM/yyyy") : "Chưa xác định")</td>
-                            <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'"><span class="badge bg-success">@asset.Status</span></td>
+                            <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'">
+                                @{
+                                    var statusClass = asset.Status switch
+                                    {
+                                        "Mới" => "bg-primary",
+                                        "Đang sử dụng" => "bg-success",
+                                        "Hỏng" => "bg-danger",
+                                        "Thanh lí" => "bg-brown",
+                                        _ => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @statusClass">@asset.Status</span>
+                            </td>
                             <td style="cursor:pointer;" onclick="window.location='@Url.Action("Details", new { id = asset.Id })'" class="text-center">
                                 @if (!string.IsNullOrEmpty(asset.ImageUrl))
                                 {
@@ -191,4 +203,71 @@
         });
     </script>
 }
+
+<style>
+    /* Style cho form lọc */
+    #filterForm > div {
+        margin-right: 10px;
+    }
+
+    #filterForm input.form-control-sm,
+    #filterForm select.form-select-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    /* Table styles */
+    table.table th, table.table td {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    table.table img {
+        border: 1px solid #ddd;
+        padding: 2px;
+        background-color: #f9f9f9;
+    }
+
+    table.table td {
+        transition: background-color 0.2s ease;
+    }
+
+    table.table tr:hover td {
+        background-color: #f1f1f1;
+    }
+
+    /* Badge màu trạng thái */
+    .badge.bg-success {
+        background-color: #28a745 !important;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .bg-brown {
+        background-color: #8B4513 !important;
+        color: #fff;
+    }
+</style>
 

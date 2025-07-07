@@ -394,18 +394,18 @@ namespace AssetManager.Services
 
             // Lấy tên người giao từ ID
             var assignerDoc = await _firestoreDb.Collection("users").Document(assignedById).GetSnapshotAsync();
-            string assignerName = assignerDoc.Exists && assignerDoc.ContainsField("name")
-                ? assignerDoc.GetValue<string>("name")
+            string assignerEmail = assignerDoc.Exists && assignerDoc.ContainsField("email")
+                ? assignerDoc.GetValue<string>("email")
                 : "(Không rõ)";
-            
-             Console.WriteLine($"[LOG] Assigner: {assignerName}");
+
+            Console.WriteLine($"[LOG] Assigner: {assignerEmail}");
 
             var assignment = new Assignment
             {
                 AssetRef = assetRef,
                 AssigneeId = assigneeId,
                 AssigneeName = assigneeName,
-                AssignedBy = assignerName, // Đảm bảo không dùng biến trùng tên tham số
+                AssignedBy = assignerEmail,
                 AssignedDate = DateTime.UtcNow,
                 ReturnedDate = null
             };
@@ -642,7 +642,54 @@ namespace AssetManager.Services
         //     return RedirectToAction("Index");
         // }
 
+        public async Task CreateMaintenanceAsync(Maintenance maintenance)
+        {
+            await _firestoreDb.Collection("maintenance_logs").AddAsync(maintenance);
+        }
 
+        public async Task<List<MaintenanceViewModel>> GetAllMaintenancesAsync()
+        {
+            var snapshot = await _firestoreDb.Collection("maintenance_logs").GetSnapshotAsync();
+            var list = new List<MaintenanceViewModel>();
+
+            foreach (var doc in snapshot.Documents)
+            {
+                var data = doc.ConvertTo<Maintenance>();
+                data.Id = doc.Id;
+
+                var assetSnap = await data.AssetRef.GetSnapshotAsync();
+                var asset = assetSnap.ConvertTo<Asset>();
+
+                list.Add(new MaintenanceViewModel
+                {
+                    Id = data.Id,
+                    //AssetId = assetSnap.Id,
+                    AssetCode = asset?.Code,
+                    AssetName = asset?.Name,
+                    Description = data.Description,
+                    MaintenanceDate = data.MaintenanceDate,
+                    Cost = data.Cost,
+                    PerformedBy = data.PerformedBy
+                });
+            }
+
+            return list.OrderByDescending(x => x.MaintenanceDate).ToList();
+        }
+
+        public async Task UpdateMaintenanceAsync(MaintenanceViewModel vm)
+        {
+            var maintenanceRef = _firestoreDb.Collection("maintenance_logs").Document(vm.Id);
+
+            var updates = new Dictionary<string, object>
+            {
+                ["description"] = vm.Description,
+                ["maintenanceDate"] = vm.MaintenanceDate,
+                ["cost"] = vm.Cost,
+                ["performedBy"] = vm.PerformedBy
+            };
+
+            await maintenanceRef.UpdateAsync(updates);
+        }
 
 
 

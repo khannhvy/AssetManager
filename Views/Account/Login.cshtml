@@ -1,8 +1,14 @@
 @model AssetManager.ViewModels.Login
 
+@{
+    Layout = "_LayoutLogin";
+}
+
+
 <h2 class="text-center">Đăng nhập</h2>
 
-<form asp-action="Login" method="post" class="w-50 mx-auto">
+<form asp-action="Login" method="post" class="mx-auto">
+    @Html.AntiForgeryToken()
     <div class="form-group mb-3">
         <label asp-for="Email"></label>
         <input asp-for="Email" class="form-control" />
@@ -13,5 +19,63 @@
         <input asp-for="Password" type="password" class="form-control" />
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+    <button type="submit" class="btn btn-primary">Đăng nhập</button>
 </form>
+
+<style>
+    body {
+        background: #f2f2f2;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h2.text-center {
+        margin-top: 50px;
+        margin-bottom: 30px;
+        color: #333;
+        font-size: 24px;
+    }
+
+    form {
+        background: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        max-width: 400px;
+    }
+
+    label {
+        font-weight: 600;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .form-control {
+        height: 40px;
+        font-size: 14px;
+        padding: 5px 10px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        font-size: 14px;
+        padding: 5px 10px;
+        width: 120px;
+        height: 35px;
+        display: block;
+        margin: 20px auto 0 auto; 
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    .text-danger {
+        font-size: 13px;
+    }
+</style>

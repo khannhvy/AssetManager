@@ -1,0 +1,36 @@
+@model List<AssetManager.Models.MaintenanceViewModel>
+
+<h2>Danh sách bảo trì tài sản</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Thêm bảo trì</a>
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã tài sản</th>
+            <th>Tên tài sản</th>
+            <th>Ngày bảo trì</th>
+            <th>Mô tả</th>
+            <th>Chi phí</th>
+            <th>Người thực hiện</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model)
+        {
+            <tr>
+                <td>@m.AssetCode</td>
+                <td>@m.AssetName</td>
+                <td>@m.MaintenanceDate.ToString("dd/MM/yyyy")</td>
+                <td>@m.Description</td>
+                <td>@m.Cost.ToString("N0") đ</td>
+                <td>@m.PerformedBy</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@m.Id" class="btn btn-sm btn-warning">Sửa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

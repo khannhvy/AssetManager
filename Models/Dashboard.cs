@@ -5,6 +5,9 @@ namespace AssetManager.Models
         public List<Asset> WarningAssets { get; set; } = new();
         public List<CategoryStat> AssetsByCategory { get; set; } = new();
         public List<StatusStat> AssetsByStatus { get; set; } = new();
+
+        public int UsedAssetsCount { get; set; }
+        public int FreeAssetsCount { get; set; }
     }
 
     public class CategoryStat

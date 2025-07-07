@@ -1,0 +1,49 @@
+@model AssetManager.Models.MaintenanceViewModel
+
+<h2>Thêm thông tin bảo trì</h2>
+
+<form asp-action="Create" method="post" class="w-50">
+    <div class="mb-3">
+        <label class="form-label">Mã tài sản (Code)</label>
+        <input asp-for="AssetCode" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Mô tả</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Ngày bảo trì</label>
+        <input asp-for="MaintenanceDate" class="form-control" type="date" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Chi phí</label>
+        <input asp-for="Cost" class="form-control" type="number" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Người thực hiện</label>
+        <input asp-for="PerformedBy" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-success">Lưu</button>
+</form>
+
+<style>
+    .custom-form {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .custom-form label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .custom-form .form-control {
+        border-radius: 4px;
+    }
+
+    .custom-form button {
+        min-width: 120px;
+    }
+</style>

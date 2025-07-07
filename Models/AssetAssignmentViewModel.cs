@@ -17,6 +17,7 @@ namespace AssetManager.Models
         public DateTime? returnedDate { get; set; }
 
         public string AssigneeId { get; set; }
-
+        public string AssignedByName { get; set; }
+        
     }
 }
